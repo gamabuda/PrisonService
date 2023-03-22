@@ -37,10 +37,12 @@
                         <RowDefinition />
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-                    <Image
-                        x:Name="ProfileImg"
-                        Grid.Row="0"
-                        Source="/Resources/prisoner-defult.png" />
+                    <Grid Grid.Row="0">
+                        <Image
+                            x:Name="ProfileImg"
+                            Source="/Resources/prisoner-defult.png" />
+                        <Image Source="{Binding Photo}" />
+                    </Grid>
                     <Button
                         x:Name="LoadImgBtn"
                         Grid.Row="1"

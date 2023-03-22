@@ -105,6 +105,12 @@
                         materialDesign:HintAssist.Hint="ИК"
                         IsEnabled="False"
                         Text="{Binding Prison}" />
+                    <TextBox
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        materialDesign:HintAssist.Hint="Должность"
+                        IsEnabled="False"
+                        Text="{Binding Post}" />
                     <StackPanel
                         Grid.Row="5"
                         Grid.ColumnSpan="2"
@@ -193,38 +199,40 @@
                     Style="{StaticResource MaterialDesignToolBar}">
                     <ComboBox
                         x:Name="PrisonCB"
-                        Width="125"
+                        Width="150"
                         Margin="8,0"
                         materialDesign:HintAssist.Hint="Место прибывания"
                         DisplayMemberPath="Name"
                         DropDownClosed="PrisonCB_DropDownClosed"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
-                    <Separator />
+                    <!--<Separator />
                     <ComboBox
                         x:Name="DateOutCB"
-                        Width="100"
+                        Width="150"
                         Margin="8,0"
                         materialDesign:HintAssist.Hint="Срок"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                        <ComboBoxItem Content="Все" IsSelected="True" />
                         <ComboBoxItem Content="До 5 лет" />
                         <ComboBoxItem Content="До 10 лет" />
                         <ComboBoxItem Content="До 25 лет" />
-                    </ComboBox>
+                    </ComboBox>-->
                     <Separator />
                     <ComboBox
                         x:Name="StateCB"
-                        Width="100"
+                        Width="150"
                         Margin="8,0"
                         materialDesign:HintAssist.Hint="Статья"
+                        DropDownClosed="StateCB_DropDownClosed"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     <Separator />
                     <ComboBox
                         x:Name="AdressCB"
-                        Width="125"
+                        Width="150"
                         Margin="8,0"
                         HorizontalAlignment="Right"
                         materialDesign:HintAssist.Hint="Место рождения"
+                        DropDownClosed="AdressCB_DropDownClosed"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                 </ToolBar>
             </ToolBarTray>

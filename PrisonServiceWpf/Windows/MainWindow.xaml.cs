@@ -1,5 +1,6 @@
 ﻿using PrisonService.Data;
 using PrisonService.Data.Shared;
+using PrisonServiceWpf.Services;
 using PrisonServiceWpf.Windows;
 using System;
 using System.Collections.Generic;
@@ -23,11 +24,11 @@ namespace PrisonServiceWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Adress> Adress { get; set; } = GenereatorStub.Adresses;
+        public List<Adress> Adress { get; set; } = DataBaseManager.GetAdresses();
         public List<string> State { get; set; } = GenereatorStub.Prisoners.Select(x => x.State).ToList();
-        public List<Prison> Prison { get; set; } = GenereatorStub.Prisons; 
-        public List<Prisoner> Prisoners { get; set; } = GenereatorStub.Prisoners;
-        public Employee Employee { get; set; } = Employee.Create("42452","Палков Михаил Шизович", "Надзератель", "Черный Дельфин");
+        public List<Prison> Prison { get; set; } = DataBaseManager.GetPrisons(); 
+        public List<Prisoner> Prisoners { get; set; } = DataBaseManager.GetPrisoners();
+        public Employee Employee { get; set; } = DataBaseManager.Employee;
 
         public MainWindow()
         {
@@ -47,8 +48,6 @@ namespace PrisonServiceWpf
 
             SurnameLb.Content = Employee.Fullname.Split(' ').First();
             ProfileGrid.DataContext = Employee;
-
-            new SignInWindow().Show();
         }
 
         private void SearchTB_TextChanged(object sender, TextChangedEventArgs e)
@@ -58,6 +57,10 @@ namespace PrisonServiceWpf
             if(SearchTB.Text != String.Empty) 
             {
                 currentLst = Prisoners.Where(x => x.Fullname.Contains(SearchTB.Text)).ToList();
+
+                PrisonCB.SelectedItem = null;
+                StateCB.SelectedItem = null;
+                AdressCB.SelectedItem = null;
             }
 
             MainLV.ItemsSource = currentLst;
@@ -66,17 +69,28 @@ namespace PrisonServiceWpf
         private void MenuItemView_Click(object sender, RoutedEventArgs e)
         {
             new PrisonerWindow(MainLV.SelectedItem as Prisoner).ShowDialog();
+            Prison = DataBaseManager.GetPrisons();
+            PrisonCB.ItemsSource = Prison;
         }
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
             new PrisonerWindow(MainLV.SelectedItem as Prisoner, true).ShowDialog();
+            Prison = DataBaseManager.GetPrisons();
+            PrisonCB.ItemsSource = Prison;
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Вы действительно хотите удалить запись про {(MainLV.SelectedItem as Prisoner).Fullname} из базы данных?", 
+            var result = MessageBox.Show($"Вы действительно хотите удалить запись про {(MainLV.SelectedItem as Prisoner).Fullname} из базы данных?", 
                 "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            if(result == MessageBoxResult.Yes)
+            {
+                DataBaseManager.TryRemovePrisoner(MainLV.SelectedItem as Prisoner);
+                Prison = DataBaseManager.GetPrisons();
+                PrisonCB.ItemsSource = Prison;
+            } 
         }
 
         private void MenuItemClose_Click(object sender, RoutedEventArgs e)
@@ -89,13 +103,47 @@ namespace PrisonServiceWpf
         {
             new PrisonerWindow(Prisoner.CreateEmpty(), true).ShowDialog();
 
-            Prisoners = GenereatorStub.Prisoners;
+            Prisoners = DataBaseManager.GetPrisoners();
             MainLV.ItemsSource = Prisoners;
         }
 
         private void PrisonCB_DropDownClosed(object sender, EventArgs e)
         {
+            if(PrisonCB.SelectedItem == null)
+                return;
 
+            Prisoners = DataBaseManager.GetPrisoners();
+            MainLV.ItemsSource = Prisoners.Where(x => x.Prison.Name == PrisonCB.Text);
+
+            AdressCB.SelectedItem = null;
+            StateCB.SelectedItem = null;
+            SearchTB.Text = null;
+        }
+
+        private void StateCB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (StateCB.SelectedItem == null)
+                return;
+
+            Prisoners = DataBaseManager.GetPrisoners();
+            MainLV.ItemsSource = Prisoners.Where(x => x.State == StateCB.Text);
+
+            PrisonCB.SelectedItem = null;
+            AdressCB.SelectedItem = null;
+            SearchTB.Text = null;
+        }
+
+        private void AdressCB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (AdressCB.SelectedItem == null)
+                return;
+
+            Prisoners = DataBaseManager.GetPrisoners();
+            MainLV.ItemsSource = Prisoners.Where(x => x.Adress.Title == AdressCB.Text);
+
+            PrisonCB.SelectedItem = null;
+            StateCB.SelectedItem = null;
+            SearchTB.Text = null;
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Win32;
 using PrisonService.Data;
 using PrisonService.Data.Shared;
+using PrisonServiceWpf.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,8 +85,14 @@ namespace PrisonServiceWpf.Windows
 
         private void DeleteBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"Вы действительно хотите удалить запись про {Prisoner.Fullname} из базы данных?",
+            var result = MessageBox.Show($"Вы действительно хотите удалить запись про {Prisoner.Fullname} из базы данных?",
                 "Удаление", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No);
+
+            if(result == MessageBoxResult.Yes)
+            {
+                DataBaseManager.TryRemovePrisoner(Prisoner);
+                this.Close();
+            }
         }
 
         private void EditBtn_Click(object sender, RoutedEventArgs e)
@@ -99,7 +107,7 @@ namespace PrisonServiceWpf.Windows
 
             if (!GenereatorStub.Prisoners.Contains(Prisoner))
             {
-                GenereatorStub.Prisoners.Add(Prisoner);
+                DataBaseManager.TryAddPrisoner(Prisoner);
 
                 this.Close();
                 return;
@@ -116,7 +124,23 @@ namespace PrisonServiceWpf.Windows
             if (op.ShowDialog() == true)
             {
                 ProfileImg.Source = new BitmapImage(new Uri(op.FileName));
+                Prisoner.Photo = ImageToByte(new BitmapImage(new Uri(op.FileName)));
             }
+        }
+
+        public Byte[] ImageToByte(BitmapImage imageSource)
+        {
+            Stream stream = imageSource.StreamSource;
+            Byte[] buffer = null;
+            if (stream != null && stream.Length > 0)
+            {
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    buffer = br.ReadBytes((Int32)stream.Length);
+                }
+            }
+
+            return buffer;
         }
     }
 }

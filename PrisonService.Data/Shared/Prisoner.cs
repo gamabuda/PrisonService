@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -7,12 +8,15 @@ using System.Threading.Tasks;
 
 namespace PrisonService.Data.Shared
 {
+    [BsonIgnoreExtraElements]
     public class Prisoner
     {
         private Prisoner(string fullname, Adress adress, DateTime birthday, Sex sex, string passport, 
-            string familyStatus, string education, string photo, string discription, string state, 
+            string familyStatus, string education, byte[] photo, string discription, string state, 
             DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {
+            Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
+
             Fullname = fullname;
             Adress = adress;
             Birthday = birthday;
@@ -35,6 +39,8 @@ namespace PrisonService.Data.Shared
         private Prisoner()
         {   }
 
+        [BsonId]
+        public string Id { get; }
         public string Fullname { get; set; }
         public Adress Adress { get; set; }
         public DateTime Birthday { get; set; }
@@ -42,7 +48,7 @@ namespace PrisonService.Data.Shared
         public string Passport { get; set; }
         public string FamilyStatus { get; set; }
         public string Education { get; set; }
-        public string Photo { get; set; }
+        public byte[] Photo { get; set; }
         public string Discription { get; set; }
         public string State { get; set; }
         public DateTime DateOut { get; set; }
@@ -54,7 +60,7 @@ namespace PrisonService.Data.Shared
         public bool Focus { get; set; }
 
         public static Prisoner Create(string fullname, Adress adress, DateTime birthday, Sex sex, string passport,
-            string familyStatus, string education, string photo, string discription, string state,
+            string familyStatus, string education, byte[] photo, string discription, string state,
             DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {
             return new Prisoner(fullname, adress, birthday, sex, passport,

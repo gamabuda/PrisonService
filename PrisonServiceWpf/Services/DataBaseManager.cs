@@ -2,6 +2,7 @@
 using PrisonService.Data;
 using PrisonService.Data.Shared;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,49 +12,74 @@ namespace PrisonServiceWpf.Services
 {
     public static class DataBaseManager
     {
+        public static Employee Employee { get; set; }
         static DataBaseManager()
         {
             _host = "localhost:27017";
             _client = new MongoClient($"mongodb://{_host}");
-            _db = _client.GetDatabase("PrisonServiceTest");
-
-            GenereateCollections();
+            _db = _client.GetDatabase("maintest1");
         }
 
         private static string _host;
         private static MongoClient _client;
         private static IMongoDatabase _db;
 
-        private  static void GenereateCollections()
+        public static List<Prisoner> GetPrisoners() 
         {
-            var collections =  _db.ListCollectionsAsync();
-
-            if (collections != null)
-                return;
-
-            _db.CreateCollection("Prisoner");
-            _db.GetCollection<Employee>("Employee"); 
-            _db.GetCollection<Prison>("Prison"); 
-            _db.GetCollection<Adress>("Adress");
-            _db.GetCollection<State>("State");
-            _db.GetCollection<Sex>("Sex");
-
-            GenereateItems();
+            return (List<Prisoner>)_db.GetCollection<Prisoner>("prisoner").AsQueryable<Prisoner>().ToList();
         }
-        private async static void GenereateItems()
+
+        public static List<Prison> GetPrisons()
         {
-            var collections = await _db.ListCollectionsAsync();
-
-            if (collections == null)
-                return;
-
-            var item =  _db.GetCollection<Prisoner>("Prisoner");
-            item.InsertMany(GenereatorStub.Prisoners);
+            return _db.GetCollection<Prison>("prison").AsQueryable<Prison>().ToList();
         }
-        private static void UpdateHost(string host)
+
+        public static List<Adress> GetAdresses()
         {
-            _host = host;
-            _client = new MongoClient($"mongodb://{_host}");
+            return _db.GetCollection<Adress>("adress").AsQueryable<Adress>().ToList(); 
+        }
+
+        public static List<Employee> GetEmployees()
+        {
+            return _db.GetCollection<Employee>("employee").AsQueryable<Employee>().ToList();
+        }
+
+        public static bool TryAddPrisoner(Prisoner prisoner)
+        {
+           try
+            {
+                var colPrisoner = _db.GetCollection<Prisoner>("prisoner");
+                var q = _db.GetCollection<Prisoner>("prisoner").AsQueryable<Prisoner>().ToList();
+
+                if(q.Contains(prisoner))
+                {
+                    colPrisoner.ReplaceOne(null, prisoner);
+                }
+                else
+                {
+                    colPrisoner.InsertOne(prisoner);
+                }
+                
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static bool TryRemovePrisoner(Prisoner prisoner)
+        {
+            try
+            {
+                var colPrisoner = _db.GetCollection<Prisoner>("prisoner");
+                colPrisoner.DeleteOne(a => a.Id == prisoner.Id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
