@@ -51,10 +51,14 @@
                             Style="{StaticResource MaterialDesignRevealPasswordBox}" />
 
                         <Button
+                            Margin="0,0,0,10"
                             Content="Войти"
                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                            Style="{StaticResource MaterialDesignRaisedButton}"
-                            ToolTip="Resource name: MaterialDesignRaisedButton" />
+                            Style="{StaticResource MaterialDesignRaisedButton}" />
+                        <Button
+                            Content="Отмена"
+                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            Style="{StaticResource MaterialDesignRaisedButton}" />
                     </StackPanel>
                 </StackPanel>
             </materialDesign:Card>
