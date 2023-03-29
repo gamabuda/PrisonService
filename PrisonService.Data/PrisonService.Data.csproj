@@ -153,8 +153,6 @@
     <Compile Include="Shared\Employee.cs" />
     <Compile Include="Shared\Prison.cs" />
     <Compile Include="Shared\Prisoner.cs" />
-    <Compile Include="Shared\Sex.cs" />
-    <Compile Include="Shared\State.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

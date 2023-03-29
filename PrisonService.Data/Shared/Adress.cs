@@ -10,7 +10,7 @@ namespace PrisonService.Data.Shared
     [BsonIgnoreExtraElements]
     public class Adress
     {
-        public Adress(string title) 
+        public Adress(string title)
         {
             Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
             Title = title;

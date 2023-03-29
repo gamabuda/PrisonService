@@ -88,8 +88,8 @@ namespace PrisonServiceWpf
             if(result == MessageBoxResult.Yes)
             {
                 DataBaseManager.TryRemovePrisoner(MainLV.SelectedItem as Prisoner);
-                Prison = DataBaseManager.GetPrisons();
-                PrisonCB.ItemsSource = Prison;
+                Prisoners = DataBaseManager.GetPrisoners();
+                MainLV.ItemsSource = Prisoners;
             } 
         }
 

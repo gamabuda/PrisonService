@@ -11,7 +11,7 @@ namespace PrisonService.Data.Shared
     [BsonIgnoreExtraElements]
     public class Prisoner
     {
-        private Prisoner(string fullname, Adress adress, DateTime birthday, Sex sex, string passport, 
+        private Prisoner(string fullname, Adress adress, DateTime birthday, string sex, string passport, 
             string familyStatus, string education, byte[] photo, string discription, string state, 
             DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {
@@ -37,14 +37,14 @@ namespace PrisonService.Data.Shared
         }
 
         private Prisoner()
-        {   }
+        { Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(); }
 
         [BsonId]
         public string Id { get; }
         public string Fullname { get; set; }
         public Adress Adress { get; set; }
         public DateTime Birthday { get; set; }
-        public Sex Sex { get; set; }
+        public string Sex { get; set; }
         public string Passport { get; set; }
         public string FamilyStatus { get; set; }
         public string Education { get; set; }
@@ -59,7 +59,7 @@ namespace PrisonService.Data.Shared
         public string Number { get; set; }
         public bool Focus { get; set; }
 
-        public static Prisoner Create(string fullname, Adress adress, DateTime birthday, Sex sex, string passport,
+        public static Prisoner Create(string fullname, Adress adress, DateTime birthday, string sex, string passport,
             string familyStatus, string education, byte[] photo, string discription, string state,
             DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {

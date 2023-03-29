@@ -1,10 +1,12 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using PrisonService.Data;
 using PrisonService.Data.Shared;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,7 +19,7 @@ namespace PrisonServiceWpf.Services
         {
             _host = "localhost:27017";
             _client = new MongoClient($"mongodb://{_host}");
-            _db = _client.GetDatabase("maintest1");
+            _db = _client.GetDatabase("maintestlast");
         }
 
         private static string _host;
@@ -68,12 +70,30 @@ namespace PrisonServiceWpf.Services
             }
         }
 
+        public static bool TryUpdatePrisoner(Prisoner prisoner)
+        {
+            try
+            {
+                TryRemovePrisoner(prisoner);
+                TryAddPrisoner(prisoner);
+
+                return true;
+            }   
+            catch
+            {
+                return false;
+            }
+        }
+
         public static bool TryRemovePrisoner(Prisoner prisoner)
         {
             try
             {
                 var colPrisoner = _db.GetCollection<Prisoner>("prisoner");
-                colPrisoner.DeleteOne(a => a.Id == prisoner.Id);
+                var builder = Builders<Prisoner>.Filter;
+                var filter = builder.Eq(x => x.Passport, prisoner.Passport);
+                var personDeleteResult =  colPrisoner.DeleteOne(filter);
+
                 return true;
             }
             catch

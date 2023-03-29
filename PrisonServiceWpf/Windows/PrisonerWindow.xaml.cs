@@ -26,9 +26,16 @@ namespace PrisonServiceWpf.Windows
     public partial class PrisonerWindow : Window
     {
         public Prisoner Prisoner { get; set; }
+        public List<Prison> Prison { get; set; } = DataBaseManager.GetPrisons();
+        public List<Adress> Adress { get; set; } = DataBaseManager.GetAdresses();
         public PrisonerWindow(Prisoner prisoner)
         {
             InitializeComponent();
+
+            PrisonTB.DataContext = Prison;
+            PrisonTB.ItemsSource = Prison;
+            AdressTB.DataContext = Adress;
+            AdressTB.ItemsSource = Adress;
 
             Prisoner = prisoner;
 
@@ -40,6 +47,11 @@ namespace PrisonServiceWpf.Windows
         public PrisonerWindow(Prisoner prisoner, bool isEditAllowed)
         {
             InitializeComponent();
+
+            PrisonTB.DataContext = Prison;
+            PrisonTB.ItemsSource = Prison;
+            AdressTB.DataContext = Adress;
+            AdressTB.ItemsSource = Adress;
 
             Prisoner = prisoner;
             _isEditAllowed = isEditAllowed;
@@ -65,6 +77,11 @@ namespace PrisonServiceWpf.Windows
                     (obj as DatePicker).IsEnabled = false;
                 }
 
+                if (obj is ComboBox)
+                {
+                    (obj as ComboBox).IsEnabled = false;
+                }
+
                 if (obj is Grid)
                 {
                     foreach (object containerObj in (obj as Grid).Children)
@@ -77,6 +94,11 @@ namespace PrisonServiceWpf.Windows
                         if (containerObj is DatePicker)
                         {
                             (containerObj as DatePicker).IsEnabled = false;
+                        }
+
+                        if (containerObj is ComboBox)
+                        {
+                            (containerObj as ComboBox).IsEnabled = false;
                         }
                     }
                 }
@@ -105,10 +127,16 @@ namespace PrisonServiceWpf.Windows
                 return;
             }
 
-            if (!GenereatorStub.Prisoners.Contains(Prisoner))
+            if (DataBaseManager.GetPrisoners().FirstOrDefault(x => x.Passport == Prisoner.Passport) == null)
             {
                 DataBaseManager.TryAddPrisoner(Prisoner);
 
+                this.Close();
+                return;
+            }
+            else
+            {
+                DataBaseManager.TryUpdatePrisoner(Prisoner);
                 this.Close();
                 return;
             }

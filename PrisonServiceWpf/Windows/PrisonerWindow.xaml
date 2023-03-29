@@ -38,9 +38,7 @@
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid Grid.Row="0">
-                        <Image
-                            x:Name="ProfileImg"
-                            Source="/Resources/prisoner-defult.png" />
+                        <Image x:Name="ProfileImg" Source="/Resources/prisoner-defult.png" />
                         <Image Source="{Binding Photo}" />
                     </Grid>
                     <Button
@@ -89,30 +87,38 @@
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             SelectedDate="{Binding Birthday}"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                        <TextBox
-                            x:Name="PassportTB"
+                        <ComboBox
+                            x:Name="SexTB"
                             Grid.Column="1"
-                            Padding="4"
-                            materialDesign:HintAssist.Hint="Паспорт"
-                            Text="{Binding Passport}" />
+                            Margin="5"
+                            VerticalAlignment="Top"
+                            materialDesign:HintAssist.Hint="Пол"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                            Text="{Binding Sex}">
+                            <ComboBoxItem Content="Мужской" />
+                            <ComboBoxItem Content="Женский" />
+                        </ComboBox>
                     </Grid>
 
                     <TextBox
-                        x:Name="PrisonTB"
-                        materialDesign:HintAssist.Hint="Место осуждения"
-                        Text="{Binding Prison}" />
+                        x:Name="StateTB"
+                        Grid.Column="1"
+                        materialDesign:HintAssist.Hint="Cтатья"
+                        Text="{Binding State}" />
 
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-
-                        <TextBox
+                        <ComboBox
                             x:Name="AdressTB"
                             Grid.Column="0"
+                            Margin="5"
                             materialDesign:HintAssist.Hint="Адрес"
-                            Text="{Binding Adress}" />
+                            DisplayMemberPath="Title"
+                            SelectedItem="{Binding Adress}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                         <TextBox
                             x:Name="NumberTB"
                             Grid.Column="1"
@@ -127,10 +133,11 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBox
-                            x:Name="SexTB"
+                            x:Name="PassportTB"
                             Grid.Column="0"
-                            materialDesign:HintAssist.Hint="Пол"
-                            Text="{Binding Sex}" />
+                            materialDesign:HintAssist.Hint="Паспорт"
+                            Text="{Binding Passport}" />
+
                         <TextBox
                             x:Name="FamilyStatusTB"
                             Grid.Column="1"
@@ -157,12 +164,14 @@
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             SelectedDate="{Binding DateOut}"
                             Style="{StaticResource MaterialDesignFloatingHintDatePicker}" />
-                        <TextBox
-                            x:Name="StateTB"
+                        <ComboBox
+                            x:Name="PrisonTB"
                             Grid.Column="1"
                             Padding="4"
-                            materialDesign:HintAssist.Hint="Cтатья"
-                            Text="{Binding State}" />
+                            materialDesign:HintAssist.Hint="Место осуждения"
+                            DisplayMemberPath="Name"
+                            SelectedItem="{Binding Prison}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>
 
                     <TextBox
