@@ -43,6 +43,8 @@ namespace PrisonServiceWpf.Windows
 
             EnableItems();
             LoadImgBtn.Visibility = Visibility.Collapsed;
+            if (Prisoner.Photo != null)
+                ProfileImg.Visibility = Visibility.Collapsed;
         }
         public PrisonerWindow(Prisoner prisoner, bool isEditAllowed)
         {
@@ -59,6 +61,8 @@ namespace PrisonServiceWpf.Windows
             this.DataContext = Prisoner;
 
             EditBtn.Content = "Cохранить";
+            if (Prisoner.Photo != null)
+                ProfileImg.Visibility = Visibility.Collapsed;
         }
 
         private bool _isEditAllowed = false;
@@ -152,23 +156,18 @@ namespace PrisonServiceWpf.Windows
             if (op.ShowDialog() == true)
             {
                 ProfileImg.Source = new BitmapImage(new Uri(op.FileName));
-                Prisoner.Photo = ImageToByte(new BitmapImage(new Uri(op.FileName)));
+                Prisoner.Photo = GetIMGFolder(new BitmapImage(new Uri(op.FileName)));
             }
         }
 
-        public Byte[] ImageToByte(BitmapImage imageSource)
+        private byte[] GetIMGFolder(BitmapImage bi)
         {
-            Stream stream = imageSource.StreamSource;
-            Byte[] buffer = null;
-            if (stream != null && stream.Length > 0)
-            {
-                using (BinaryReader br = new BinaryReader(stream))
-                {
-                    buffer = br.ReadBytes((Int32)stream.Length);
-                }
-            }
-
-            return buffer;
+            PngBitmapEncoder pe = new PngBitmapEncoder();
+            MemoryStream ms = new MemoryStream();
+            StringBuilder sb = new StringBuilder();
+            pe.Frames.Add(BitmapFrame.Create(bi));
+            pe.Save(ms);
+            return ms.ToArray();
         }
     }
 }
