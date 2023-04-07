@@ -117,6 +117,7 @@
                             Margin="5"
                             materialDesign:HintAssist.Hint="Адрес"
                             DisplayMemberPath="Title"
+                            IsSynchronizedWithCurrentItem="True"
                             SelectedItem="{Binding Adress}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                         <TextBox
@@ -170,6 +171,7 @@
                             Padding="4"
                             materialDesign:HintAssist.Hint="Место осуждения"
                             DisplayMemberPath="Name"
+                            IsSynchronizedWithCurrentItem="True"
                             SelectedItem="{Binding Prison}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     </Grid>

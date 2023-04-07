@@ -41,6 +41,9 @@ namespace PrisonServiceWpf.Windows
 
             this.DataContext = Prisoner;
 
+            AdressTB.SelectedItem = Prisoner.Adress;
+            PrisonTB.SelectedItem = Prisoner.Prison;
+
             EnableItems();
             LoadImgBtn.Visibility = Visibility.Collapsed;
             if (Prisoner.Photo != null)
@@ -59,6 +62,9 @@ namespace PrisonServiceWpf.Windows
             _isEditAllowed = isEditAllowed;
 
             this.DataContext = Prisoner;
+
+            AdressTB.SelectedItem = Prisoner.Adress;
+            PrisonTB.SelectedItem = Prisoner.Prison;
 
             EditBtn.Content = "Cохранить";
             if (Prisoner.Photo != null)
