@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Xml.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PrisonServiceWpf.Windows
 {
@@ -26,23 +27,18 @@ namespace PrisonServiceWpf.Windows
     public partial class PrisonerWindow : Window
     {
         public Prisoner Prisoner { get; set; }
-        public List<Prison> Prison { get; set; } = DataBaseManager.GetPrisons();
-        public List<Adress> Adress { get; set; } = DataBaseManager.GetAdresses();
+        public List<string> Prison { get; set; } = DataBaseManager.GetPrisoners().Select(x => x.Prison).Distinct().ToList();
+        public List<string> Adress { get; set; } = DataBaseManager.GetPrisoners().Select(x => x.Adress).Distinct().ToList();
         public PrisonerWindow(Prisoner prisoner)
         {
             InitializeComponent();
-
-            PrisonTB.DataContext = Prison;
-            PrisonTB.ItemsSource = Prison;
-            AdressTB.DataContext = Adress;
-            AdressTB.ItemsSource = Adress;
 
             Prisoner = prisoner;
 
             this.DataContext = Prisoner;
 
-            AdressTB.SelectedItem = Prisoner.Adress;
-            PrisonTB.SelectedItem = Prisoner.Prison;
+            PrisonTB.Text = Prisoner.Prison;
+            SexTB.Text = Prisoner.Sex;
 
             EnableItems();
             LoadImgBtn.Visibility = Visibility.Collapsed;
@@ -53,18 +49,18 @@ namespace PrisonServiceWpf.Windows
         {
             InitializeComponent();
 
-            PrisonTB.DataContext = Prison;
-            PrisonTB.ItemsSource = Prison;
-            AdressTB.DataContext = Adress;
-            AdressTB.ItemsSource = Adress;
-
             Prisoner = prisoner;
             _isEditAllowed = isEditAllowed;
 
             this.DataContext = Prisoner;
 
-            AdressTB.SelectedItem = Prisoner.Adress;
-            PrisonTB.SelectedItem = Prisoner.Prison;
+            PrisonTB.Text = Prisoner.Prison;
+            SexTB.Text = Prisoner.Sex;
+
+            //if(Prisoner.Prison != null && Prisoner.Adress != null)
+            //{
+            //    PrisonTB.SelectedItem = Adress.FirstOrDefault(x => x == Prisoner.Adress);
+            //}
 
             EditBtn.Content = "Cохранить";
             if (Prisoner.Photo != null)
@@ -174,6 +170,30 @@ namespace PrisonServiceWpf.Windows
             pe.Frames.Add(BitmapFrame.Create(bi));
             pe.Save(ms);
             return ms.ToArray();
+        }
+
+        private void AdressTB_DropDownClosed(object sender, EventArgs e)
+        {
+            if(!String.IsNullOrEmpty(AdressTB.Text))
+            {
+                Prisoner.Adress = AdressTB.Text;
+            }
+        }
+
+        private void PrisonTB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(PrisonTB.Text))
+            {
+                Prisoner.Prison = PrisonTB.Text;
+            }
+        }
+
+        private void SexTB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(SexTB.Text))
+            {
+                Prisoner.Sex = SexTB.Text;
+            }
         }
     }
 }

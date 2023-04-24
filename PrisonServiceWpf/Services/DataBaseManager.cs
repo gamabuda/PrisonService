@@ -19,7 +19,7 @@ namespace PrisonServiceWpf.Services
         {
             _host = "localhost:27017";
             _client = new MongoClient($"mongodb://{_host}");
-            _db = _client.GetDatabase("maintestlast");
+            _db = _client.GetDatabase("prison_service_mongdb");
         }
 
         private static string _host;

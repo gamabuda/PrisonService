@@ -98,7 +98,7 @@
                         Grid.Column="0"
                         materialDesign:HintAssist.Hint="Номер жетона"
                         IsEnabled="False"
-                        Text="{Binding Id}" />
+                        Text="{Binding Number}" />
                     <TextBox
                         Grid.Row="3"
                         Grid.Column="0"
@@ -134,6 +134,8 @@
                         </MenuItem.Icon>
 
                         <MenuItem Click="MenuItemAdd_Click" Header="Добавить нового" />
+                        <MenuItem Click="MenuItemReset_Click" Header="Сбросить фильтр" />
+                        <MenuItem Click="MenuItemTheme_Click" Header="Сменить тему" />
                         <MenuItem Click="MenuItemClose_Click" Header="Выйти из профиля" />
                     </MenuItem>
                 </Menu>
@@ -153,7 +155,7 @@
             </ToolBar>
         </ToolBarTray>
 
-        <StackPanel Grid.Row="1">
+        <Grid Grid.Row="1">
             <materialDesign:Card Margin="16" Padding="16">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <ListView x:Name="MainLV">
@@ -175,7 +177,7 @@
                                 <GridViewColumn DisplayMemberBinding="{Binding State}" Header="Статья" />
                                 <GridViewColumn
                                     Width="auto"
-                                    DisplayMemberBinding="{Binding Prison.Name}"
+                                    DisplayMemberBinding="{Binding Prison}"
                                     Header="Место осуждения" />
                             </GridView>
                         </ListView.View>
@@ -189,7 +191,7 @@
                     </ListView>
                 </ScrollViewer>
             </materialDesign:Card>
-        </StackPanel>
+        </Grid>
 
         <Grid Grid.Row="2">
             <ToolBarTray>
@@ -202,7 +204,6 @@
                         Width="150"
                         Margin="8,0"
                         materialDesign:HintAssist.Hint="Место прибывания"
-                        DisplayMemberPath="Name"
                         DropDownClosed="PrisonCB_DropDownClosed"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
                     <!--<Separator />
@@ -234,6 +235,18 @@
                         materialDesign:HintAssist.Hint="Место рождения"
                         DropDownClosed="AdressCB_DropDownClosed"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                    <Separator />
+                    <ComboBox
+                        x:Name="SexCB"
+                        Width="150"
+                        Margin="8,0"
+                        HorizontalAlignment="Right"
+                        materialDesign:HintAssist.Hint="Пол"
+                        DropDownClosed="SexCB_DropDownClosed"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <ComboBoxItem Content="Мужской" />
+                        <ComboBoxItem Content="Женский" />
+                    </ComboBox>
                 </ToolBar>
             </ToolBarTray>
         </Grid>

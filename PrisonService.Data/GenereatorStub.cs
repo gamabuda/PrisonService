@@ -27,10 +27,10 @@ namespace PrisonService.Data
         };
         public static List<Prisoner> Prisoners { get; set; } = new List<Prisoner>()
         {
-            Prisoner.Create("Яппаров Дияр Рафаэльевич", Adresses.First(), new DateTime(2002, 12, 2), "мужской", "1233 344124", "Женат", "Неполное средне-специальное", null,
-            "Особо опасен", "104", new DateTime(2034, 4, 12), Prisons.First(), true, "Облысенние, гипотит", true, "89494221222", false),
-            Prisoner.Create("Карпов Данил Дмитриевич", Adresses.Last(), new DateTime(2003, 7, 27), "мужской", "4221 124124", "Не женат", "Средне-специальное", null,
-            "Всыпльчевый, ходил на минтинги", "228", new DateTime(2030, 6, 11), Prisons.First(), false, "Задержка в развитии", false, "89249124113", true)
+            Prisoner.Create("Яппаров Дияр Рафаэльевич", "РФ РТ г.Набережные Челлны ул.Совхозская д.1", new DateTime(2002, 12, 2), "Мужской", "1233 344124", "Женат", "Неполное средне-специальное", null,
+            "Особо опасен", "104", new DateTime(2034, 4, 12), "Черный дельфин", true, "Облысенние, гипотит", true, "89494221222", false),
+            Prisoner.Create("Карпов Данил Дмитриевич", "РФ РТ г.Нижнекамск ул.Гагарина д.14", new DateTime(2003, 7, 27), "Мужской", "4221 124124", "Не женат", "Средне-специальное", null,
+            "Всыпльчевый, ходил на минтинги", "228", new DateTime(2030, 6, 11), "Черный дельфин", false, "Задержка в развитии", false, "89249124113", true)
         };
 
         public static List<Employee> Employees { get; set; } = new List<Employee>()

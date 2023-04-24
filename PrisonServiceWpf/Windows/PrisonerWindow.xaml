@@ -93,6 +93,7 @@
                             Margin="5"
                             VerticalAlignment="Top"
                             materialDesign:HintAssist.Hint="Пол"
+                            DropDownClosed="SexTB_DropDownClosed"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}"
                             Text="{Binding Sex}">
                             <ComboBoxItem Content="Мужской" />
@@ -101,25 +102,21 @@
                     </Grid>
 
                     <TextBox
-                        x:Name="StateTB"
+                        x:Name="AdressTB"
                         Grid.Column="1"
-                        materialDesign:HintAssist.Hint="Cтатья"
-                        Text="{Binding State}" />
+                        materialDesign:HintAssist.Hint="Адрес"
+                        Text="{Binding Adress}" />
 
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
-                        <ComboBox
-                            x:Name="AdressTB"
+                        <TextBox
+                            x:Name="StateTB"
                             Grid.Column="0"
-                            Margin="5"
-                            materialDesign:HintAssist.Hint="Адрес"
-                            DisplayMemberPath="Title"
-                            IsSynchronizedWithCurrentItem="True"
-                            SelectedItem="{Binding Adress}"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                            materialDesign:HintAssist.Hint="Cтатья"
+                            Text="{Binding State}" />
                         <TextBox
                             x:Name="NumberTB"
                             Grid.Column="1"
@@ -170,10 +167,17 @@
                             Grid.Column="1"
                             Padding="4"
                             materialDesign:HintAssist.Hint="Место осуждения"
-                            DisplayMemberPath="Name"
+                            DropDownClosed="PrisonTB_DropDownClosed"
                             IsSynchronizedWithCurrentItem="True"
                             SelectedItem="{Binding Prison}"
-                            Style="{StaticResource MaterialDesignFloatingHintComboBox}" />
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem Content="Владимирский централ" />
+                            <ComboBoxItem Content="Кресты" />
+                            <ComboBoxItem Content="Матросская тишина" />
+                            <ComboBoxItem Content="Бутырка" />
+                            <ComboBoxItem Content="Белый лебедь" />
+                            <ComboBoxItem Content="Черный дельфин" />
+                        </ComboBox>
                     </Grid>
 
                     <TextBox

@@ -11,9 +11,9 @@ namespace PrisonService.Data.Shared
     [BsonIgnoreExtraElements]
     public class Prisoner
     {
-        private Prisoner(string fullname, Adress adress, DateTime birthday, string sex, string passport, 
+        private Prisoner(string fullname, string adress, DateTime birthday, string sex, string passport, 
             string familyStatus, string education, byte[] photo, string discription, string state, 
-            DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
+            DateTime dateOut, string prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {
             Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString();
 
@@ -42,7 +42,7 @@ namespace PrisonService.Data.Shared
         [BsonId]
         public string Id { get; }
         public string Fullname { get; set; }
-        public Adress Adress { get; set; }
+        public string Adress { get; set; }
         public DateTime Birthday { get; set; }
         public string Sex { get; set; }
         public string Passport { get; set; }
@@ -52,16 +52,16 @@ namespace PrisonService.Data.Shared
         public string Discription { get; set; }
         public string State { get; set; }
         public DateTime DateOut { get; set; }
-        public Prison Prison { get; set; }
+        public string Prison { get; set; }
         public bool IsArmmyReady { get; set; }
         public string Sick { get; set; }
         public bool DietFood { get; set; }
         public string Number { get; set; }
         public bool Focus { get; set; }
 
-        public static Prisoner Create(string fullname, Adress adress, DateTime birthday, string sex, string passport,
+        public static Prisoner Create(string fullname, string adress, DateTime birthday, string sex, string passport,
             string familyStatus, string education, byte[] photo, string discription, string state,
-            DateTime dateOut, Prison prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
+            DateTime dateOut, string prison, bool isArmmyReady, string sick, bool dietFood, string number, bool focus)
         {
             return new Prisoner(fullname, adress, birthday, sex, passport,
             familyStatus, education, photo, discription, state,

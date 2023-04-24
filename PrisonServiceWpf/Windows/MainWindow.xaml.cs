@@ -1,4 +1,5 @@
-﻿using PrisonService.Data;
+﻿using MaterialDesignThemes.Wpf;
+using PrisonService.Data;
 using PrisonService.Data.Shared;
 using PrisonServiceWpf.Services;
 using PrisonServiceWpf.Windows;
@@ -24,9 +25,9 @@ namespace PrisonServiceWpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public List<Adress> Adress { get; set; } = DataBaseManager.GetAdresses();
-        public List<string> State { get; set; } = GenereatorStub.Prisoners.Select(x => x.State).ToList();
-        public List<Prison> Prison { get; set; } = DataBaseManager.GetPrisons(); 
+        public List<string> Adress { get; set; } = DataBaseManager.GetPrisoners().Select(x => x.Adress).Distinct().ToList();
+        public List<string> State { get; set; } = DataBaseManager.GetPrisoners().Select(x => x.State).Distinct().ToList();
+        public List<string> Prison { get; set; } = DataBaseManager.GetPrisoners().Select(x => x.Prison).Distinct().ToList();
         public List<Prisoner> Prisoners { get; set; } = DataBaseManager.GetPrisoners();
         public Employee Employee { get; set; } = DataBaseManager.Employee;
 
@@ -50,6 +51,26 @@ namespace PrisonServiceWpf
             ProfileGrid.DataContext = Employee;
         }
 
+        private void UpdateData()
+        {
+            Prisoners = DataBaseManager.GetPrisoners();
+            Adress = DataBaseManager.GetPrisoners().Select(x => x.Adress).Distinct().ToList();
+            State = DataBaseManager.GetPrisoners().Select(x => x.State).Distinct().ToList();
+            Prison = DataBaseManager.GetPrisoners().Select(x => x.Prison).Distinct().ToList();
+
+            MainLV.DataContext = Prisoners;
+            MainLV.ItemsSource = Prisoners;
+
+            PrisonCB.DataContext = Prison;
+            PrisonCB.ItemsSource = Prison;
+
+            StateCB.DataContext = State;
+            StateCB.ItemsSource = State;
+
+            AdressCB.DataContext = Adress;
+            AdressCB.ItemsSource = Adress;
+        }
+
         private void SearchTB_TextChanged(object sender, TextChangedEventArgs e)
         {
             var currentLst = Prisoners;
@@ -69,15 +90,15 @@ namespace PrisonServiceWpf
         private void MenuItemView_Click(object sender, RoutedEventArgs e)
         {
             new PrisonerWindow(MainLV.SelectedItem as Prisoner).ShowDialog();
-            Prison = DataBaseManager.GetPrisons();
-            PrisonCB.ItemsSource = Prison;
+            Prison = DataBaseManager.GetPrisoners().Select(x => x.Prison).ToList();
+            UpdateData();
         }
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
             new PrisonerWindow(MainLV.SelectedItem as Prisoner, true).ShowDialog();
-            Prison = DataBaseManager.GetPrisons();
-            PrisonCB.ItemsSource = Prison;
+            Prison = DataBaseManager.GetPrisoners().Select(x => x.Prison).ToList();
+            UpdateData();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
@@ -89,7 +110,7 @@ namespace PrisonServiceWpf
             {
                 DataBaseManager.TryRemovePrisoner(MainLV.SelectedItem as Prisoner);
                 Prisoners = DataBaseManager.GetPrisoners();
-                MainLV.ItemsSource = Prisoners;
+                UpdateData();
             } 
         }
 
@@ -104,7 +125,7 @@ namespace PrisonServiceWpf
             new PrisonerWindow(Prisoner.CreateEmpty(), true).ShowDialog();
 
             Prisoners = DataBaseManager.GetPrisoners();
-            MainLV.ItemsSource = Prisoners;
+            UpdateData();
         }
 
         private void PrisonCB_DropDownClosed(object sender, EventArgs e)
@@ -113,8 +134,9 @@ namespace PrisonServiceWpf
                 return;
 
             Prisoners = DataBaseManager.GetPrisoners();
-            MainLV.ItemsSource = Prisoners.Where(x => x.Prison.Name == PrisonCB.Text);
+            MainLV.ItemsSource = Prisoners.Where(x => x.Prison == PrisonCB.Text);
 
+            SexCB.SelectedItem = null;
             AdressCB.SelectedItem = null;
             StateCB.SelectedItem = null;
             SearchTB.Text = null;
@@ -128,6 +150,7 @@ namespace PrisonServiceWpf
             Prisoners = DataBaseManager.GetPrisoners();
             MainLV.ItemsSource = Prisoners.Where(x => x.State == StateCB.Text);
 
+            SexCB.SelectedItem = null;
             PrisonCB.SelectedItem = null;
             AdressCB.SelectedItem = null;
             SearchTB.Text = null;
@@ -139,11 +162,50 @@ namespace PrisonServiceWpf
                 return;
 
             Prisoners = DataBaseManager.GetPrisoners();
-            MainLV.ItemsSource = Prisoners.Where(x => x.Adress.Title == AdressCB.Text);
+            MainLV.ItemsSource = Prisoners.Where(x => x.Adress == AdressCB.Text);
 
+            SexCB.SelectedItem = null;
             PrisonCB.SelectedItem = null;
             StateCB.SelectedItem = null;
             SearchTB.Text = null;
+        }
+
+        private void SexCB_DropDownClosed(object sender, EventArgs e)
+        {
+            if (SexCB.SelectedItem == null)
+                return;
+
+            Prisoners = DataBaseManager.GetPrisoners();
+            MainLV.ItemsSource = Prisoners.Where(x => x.Sex == SexCB.Text);
+
+            AdressCB.SelectedItem = null;
+            PrisonCB.SelectedItem = null;
+            StateCB.SelectedItem = null;
+            SearchTB.Text = null;
+            
+        }
+
+        private bool _theme = false;
+        private void MenuItemTheme_Click(object sender, RoutedEventArgs e)
+        {
+            PaletteHelper _paletteHelper = new PaletteHelper();
+            ITheme theme = _paletteHelper.GetTheme();
+            IBaseTheme baseTheme = _theme ? new MaterialDesignDarkTheme() : (IBaseTheme)new MaterialDesignLightTheme();
+            theme.SetBaseTheme(baseTheme);
+            _paletteHelper.SetTheme(theme);
+
+            _theme = !_theme;
+        }
+
+        private void MenuItemReset_Click(object sender, RoutedEventArgs e)
+        {
+            SexCB.SelectedItem = null;
+            AdressCB.SelectedItem = null;
+            PrisonCB.SelectedItem = null;
+            StateCB.SelectedItem = null;
+            SearchTB.Text = null;
+
+            MainLV.ItemsSource = Prisoners;
         }
     }
 }

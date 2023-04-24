@@ -16,15 +16,15 @@ namespace PrisonService.Test
             var ls = GenereatorStub.Prisoners;
 
             MongoClient client = new MongoClient("mongodb://localhost:27017");
-            var db = client.GetDatabase("maintestlast");
+            var db = client.GetDatabase("prison_service_mongdb");
 
-            db.CreateCollection("adress");  // создаем коллекцию "adresses"
-            var colAdress = db.GetCollection<Adress>("adress");
-            colAdress.InsertMany(GenereatorStub.Adresses);
+            //db.CreateCollection("adress");  // создаем коллекцию "adresses"
+            //var colAdress = db.GetCollection<Adress>("adress");
+            //colAdress.InsertMany(GenereatorStub.Adresses);
 
-            db.CreateCollection("prison");  // создаем коллекцию "prison"
-            var colPrisons = db.GetCollection<Prison>("prison");
-            colPrisons.InsertMany(GenereatorStub.Prisons);
+            //db.CreateCollection("prison");  // создаем коллекцию "prison"
+            //var colPrisons = db.GetCollection<Prison>("prison");
+            //colPrisons.InsertMany(GenereatorStub.Prisons);
 
             db.CreateCollection("prisoner");  // создаем коллекцию "prisoner"
             var colPrisoner = db.GetCollection<Prisoner>("prisoner");
